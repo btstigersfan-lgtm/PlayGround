@@ -16,3 +16,15 @@
 - 👤 [Explore the creator's projects](https://go.ondev.store/btstigersfan-lgtm).
 - 🌍 [Create with OMGithub](https://go.ondev.store/).
 <!-- omgithub:readme:end -->
+
+## Run locally
+
+This is a dependency-free static ES-module app. From the project root, start a local web server:
+
+```sh
+python3 -m http.server 8000
+```
+
+Then open <http://localhost:8000> in a browser. Stop the server with `Ctrl+C`.
+
+`start.sh` and `capture.sh` are OMGithub host-runtime wrappers; they require the host-provided `RUNTIME_DIR` and are not the local development commands.

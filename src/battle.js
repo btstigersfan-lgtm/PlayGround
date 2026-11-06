@@ -172,7 +172,8 @@ function directDamage(b, src, tgt, raw, kind = 'melee', opts = {}) {
     dmg -= absorbed;
     ev(b, 'shieldHit', { x: tgt.x, y: tgt.y - 52, amount: Math.round(absorbed) });
   }
-  const rounded = Math.max(1, Math.round(dmg));
+  const rounded = Math.round(dmg);
+  if (rounded <= 0) return 0;
   tgt.hp -= rounded;
   tgt.flash = 1;
   tgt.hitAnim = 1;
