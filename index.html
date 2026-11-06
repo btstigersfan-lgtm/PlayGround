@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#070a12" />
+<title>CHIMERA — Five-Lane Trial</title>
+<meta name="description" content="Fuse animal and monster essences into unique chimeras, then command them across five tactical lanes." />
+<link rel="preload" href="assets/fonts/cinzel.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="assets/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="backdrop" aria-hidden="true">
+  <div class="nebula nebula-a"></div>
+  <div class="nebula nebula-b"></div>
+  <div class="nebula nebula-c"></div>
+  <div class="stars"></div>
+  <div class="grain"></div>
+</div>
+
+<div id="app">
+  <header class="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+        <defs>
+          <linearGradient id="brandGold" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#f6e6b4"/><stop offset=".5" stop-color="#d9ad62"/><stop offset="1" stop-color="#8c6428"/>
+          </linearGradient>
+        </defs>
+        <path d="M24 2.8 42.5 13v22L24 45.2 5.5 35V13z" fill="none" stroke="url(#brandGold)" stroke-width="1.4"/>
+        <path d="M24 8.2 37.4 15.9v16.2L24 39.8 10.6 32.1V15.9z" fill="none" stroke="url(#brandGold)" stroke-width=".7" opacity=".55"/>
+        <path d="M14 18.5c4.6-4 7.2-4.6 10-4.6s5.4.6 10 4.6c-2.8 0-5.2 1.6-6.6 3.6h-6.8C19.2 20.1 16.8 18.5 14 18.5Z" fill="url(#brandGold)" opacity=".9"/>
+        <path d="M17.4 24.2 24 20l6.6 4.2v7.4L24 35.8l-6.6-4.2z" fill="none" stroke="url(#brandGold)" stroke-width="1.1"/>
+        <circle cx="24" cy="27.9" r="2.4" fill="#f6e6b4"/>
+        <circle cx="24" cy="27.9" r="5.2" fill="none" stroke="#d9ad62" stroke-width=".6" opacity=".6"/>
+      </svg>
+      <div class="brand-text">
+        <span class="brand-name">CHIMERA</span>
+        <span class="brand-sub">Five-Lane Trial</span>
+      </div>
+    </div>
+
+    <div class="runline" id="runline">
+      <div class="round-pips" id="roundPips" aria-label="Trial progress"></div>
+      <div class="run-copy">
+        <span class="run-label" id="roundLabel">TRIAL I / V</span>
+        <span class="run-title" id="roundTitle">THE THORNWILD</span>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <div class="stat-pill ember-pill" title="Embers remaining — a lost trial consumes one.">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6c2.6 4.2 6.1 6.6 6.1 11.1A6.1 6.1 0 0 1 12 19.8a6.1 6.1 0 0 1-6.1-6.1c0-2.5 1.3-4.6 2.8-6.4.2 1.7 1 2.9 2.1 3.5.1-2.7.7-5.3 1.2-8.2Z" fill="currentColor"/><path d="M12 21.4c2.9 0 5.1-1.7 5.8-4.2H6.2c.7 2.5 2.9 4.2 5.8 4.2Z" fill="currentColor" opacity=".5"/></svg>
+        <span id="emberCount">3</span>
+      </div>
+      <div class="stat-pill aether-pill" title="Aether — spend it in the Fusion Chamber.">
+        <span class="aether-orb" aria-hidden="true"></span>
+        <span id="aetherCount">5</span>
+        <span class="aether-word">AETHER</span>
+      </div>
+      <button class="icon-btn" id="soundBtn" aria-label="Toggle sound" title="Toggle sound">
+        <svg viewBox="0 0 24 24" aria-hidden="true" class="sound-on"><path d="M4 9.5h3.4L12 5.3v13.4l-4.6-4.2H4z" fill="currentColor"/><path d="M15.2 8.4a5 5 0 0 1 0 7.2M17.7 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <svg viewBox="0 0 24 24" aria-hidden="true" class="sound-off"><path d="M4 9.5h3.4L12 5.3v13.4l-4.6-4.2H4z" fill="currentColor"/><path d="m16 9 5 6m0-6-5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+      <button class="icon-btn" id="infoBtn" aria-label="How to play" title="How to play">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.4" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M12 10.4v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="7.4" r="1.1" fill="currentColor"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ───────────────────────── PREP ───────────────────────── -->
+    <section class="view prep-view" id="prepView">
+      <div class="prep-head">
+        <div class="prep-heading">
+          <div class="eyebrow"><span class="rule"></span> THE RITE OF BINDING <span class="rule"></span></div>
+          <h1>THE FUSION LAB</h1>
+          <p>Weave two essences into one hunter. The <strong>Prime</strong> lends its active power; the <strong>Seed</strong> lends its instinct. Deploy each chimera to a resonant lane.</p>
+        </div>
+        <div class="step-track" id="stepTrack">
+          <div class="step" data-step="1"><span>01</span><em>Choose essences</em></div>
+          <div class="step" data-step="2"><span>02</span><em>Mark a lane</em></div>
+          <div class="step" data-step="3"><span>03</span><em>Bind &amp; deploy</em></div>
+        </div>
+      </div>
+
+      <div class="prep-grid">
+        <aside class="panel essence-panel">
+          <div class="panel-head">
+            <div><h2>ESSENCE VAULT</h2><span class="panel-sub">Twelve lineages, endless horrors</span></div>
+            <span class="pick-hint" id="essenceHint">Choose the PRIME</span>
+          </div>
+          <div class="lineage-slots" id="lineageSlots"></div>
+          <div class="essence-grid" id="essenceGrid"></div>
+          <div class="vault-foot">
+            <span class="legend-dot prime"></span><span>Prime → active ability</span>
+            <span class="legend-dot seed"></span><span>Seed → passive</span>
+          </div>
+        </aside>
+
+        <section class="panel forge-panel">
+          <div class="panel-head">
+            <div><h2>FUSION CHAMBER</h2><span class="panel-sub" id="forgeSub">The chamber is listening</span></div>
+            <span class="cost-tag" id="fusionCost">◆ 1 AETHER</span>
+          </div>
+          <div class="forge-body" id="fusionPreview"></div>
+        </section>
+
+        <aside class="panel deploy-panel">
+          <div class="panel-head">
+            <div><h2>THE FIVE LANES</h2><span class="panel-sub" id="deploySub">Garrison every lane</span></div>
+            <span class="lane-count" id="laneCount">0 / 5</span>
+          </div>
+          <div class="lane-list" id="laneList"></div>
+          <div class="battle-cta">
+            <button class="primary-btn" id="battleBtn" disabled>
+              <span class="btn-sheen"></span>
+              <span class="btn-label">ENTER THE ARENA</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <p class="tiny" id="deployHint">All five lanes must be garrisoned before the horn sounds.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── BATTLE ───────────────────────── -->
+    <section class="view battle-view hidden" id="battleView">
+      <div class="battle-head">
+        <div class="score-side ally">
+          <span class="score-label">YOUR CHIMERAS</span>
+          <div class="score-pips" id="allyPips"></div>
+        </div>
+        <div class="battle-center">
+          <div class="phase-line"><span id="battlePhase">THE HORN SOUNDS</span></div>
+          <div class="battle-meta">
+            <span class="timer" id="battleTimer">1:00</span>
+            <span class="dot-sep">·</span>
+            <span id="battleRule">FIRST TO THREE LANES</span>
+            <button class="speed-btn" id="speedBtn" title="Battle speed">1×</button>
+          </div>
+        </div>
+        <div class="score-side enemy">
+          <div class="score-pips" id="enemyPips"></div>
+          <span class="score-label">THE RIVAL COVENANT</span>
+        </div>
+      </div>
+
+      <div class="arena" id="arena"></div>
+
+      <div class="command-bar" id="commandBar">
+        <div class="cmd-wrap" id="cmdWrap"></div>
+        <div class="command-hint" id="commandHint">
+          <span class="hint-glyph">✦</span>
+          <span id="hintText">Abilities charge as your chimeras strike. Commands are yours alone.</span>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toast-stack" id="toastStack" aria-live="polite"></div>
+<div class="overlay-root" id="overlayRoot"></div>
+<div class="modal-root hidden" id="modalRoot">
+  <div class="modal-backdrop" data-close-modal></div>
+  <div class="modal howto-modal" role="dialog" aria-modal="true" aria-labelledby="howtoTitle">
+    <button class="modal-x" data-close-modal aria-label="Close">×</button>
+    <div class="eyebrow"><span class="rule"></span> THE TRIAL <span class="rule"></span></div>
+    <h2 id="howtoTitle">HOW TO BECOME A CHIMERA</h2>
+    <div class="howto-grid">
+      <div class="howto-step"><span class="num">I</span><h3>Fuse</h3><p>Pick two essences. The first is the <strong>Prime</strong> and grants its active ability. The second is the <strong>Seed</strong> and grants its passive. Every cross-lineage fusion mutates.</p></div>
+      <div class="howto-step"><span class="num">II</span><h3>Deploy</h3><p>Each lane carries a terrain resonance. A chimera carrying that lineage gains its blessing. Place your five hunters against the rival lineup — every enemy is visible before the horn.</p></div>
+      <div class="howto-step"><span class="num">III</span><h3>Command</h3><p>Duels unfold on their own; your commands turn them. <strong>Q</strong> Rally, <strong>W</strong> Aegis, <strong>E</strong> Starfall, <strong>R</strong> Shift a fighter to another lane. Win three of five lanes to take the trial.</p></div>
+      <div class="howto-step"><span class="num">IV</span><h3>Ascend</h3><p>Five trials stand between you and the First Chimera. Each victory grants Aether and a boon. Lose, and an Ember is spent. Lose all three and the dream fades.</p></div>
+    </div>
+    <div class="howto-controls">
+      <span><b>Q</b> Rally</span><span><b>W</b> Aegis</span><span><b>E</b> Starfall</span><span><b>1–5</b> target lane</span><span><b>R</b> Shift</span><span><b>Esc</b> cancel</span>
+    </div>
+    <button class="primary-btn modal-go" data-close-modal><span class="btn-label">RETURN TO THE LAB</span></button>
+  </div>
+</div>
+
+<script type="module" src="js/game.js"></script>
+</body>
+</html>
