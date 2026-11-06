@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="./styles.css">
+<style>
+body{overflow:auto;background:#071019;padding:20px;font-family:Rajdhani}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.c{background:radial-gradient(circle at 50% 40%, #14283a, #08111b);border:1px solid #1d3446;border-radius:8px;text-align:center;padding:8px;color:#cfe6f2}
+.c canvas{width:100%;height:160px}
+h2{color:#7fe9dc;font-family:Cinzel;font-size:20px;margin:6px 0 14px}
+.lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#9fb4c6}
+</style></head>
+<body>
+<h2>CREATURE MATRIX</h2>
+<div class="grid" id="g"></div>
+<script type="module">
+import { SPECIES } from './src/data.js';
+import { makeBaseUnit, buildArt, previewSplice } from './src/units.js';
+import { drawCreature } from './src/art.js';
+const g=document.getElementById('g');
+const units=Object.keys(SPECIES).map(k=>makeBaseUnit(k));
+const hybrids=[previewSplice(makeBaseUnit('wolf'),makeBaseUnit('bear')),previewSplice(makeBaseUnit('drake'),makeBaseUnit('falcon')),previewSplice(makeBaseUnit('serpent'),makeBaseUnit('mantis')),previewSplice(makeBaseUnit('golem'),makeBaseUnit('scorpion')),previewSplice(makeBaseUnit('wraith'),makeBaseUnit('toad')),previewSplice(makeBaseUnit('lynx'),makeBaseUnit('rhino'))];
+units.push(...hybrids);
+for(const u of units){
+  const c=document.createElement('div'); c.className='c';
+  const cv=document.createElement('canvas'); c.appendChild(cv);
+  const lbl=document.createElement('div'); lbl.className='lbl'; lbl.textContent=u.name; c.appendChild(lbl);
+  const meta=document.createElement('div'); meta.className='lbl'; meta.style.color='#5d7188'; meta.textContent=u.primary+(u.secondary?' / '+u.secondary:''); c.appendChild(meta);
+  g.appendChild(c);
+  const ctx=cv.getContext('2d'); const dpr=2; cv.width=300*dpr; cv.height=160*dpr; ctx.scale(dpr,dpr);
+  drawCreature(ctx,u.art,150,148,1.25,{ring:false,animate:false,time:0,seed:1});
+}
+</script>
+</body></html>
